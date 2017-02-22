@@ -4597,7 +4597,7 @@ void GMGameLayer::keyBackClicked(){
                 continueGame();
             }
         }
-//        ZPLog("测试暂停界面3 == status %d",tempStatus);
+        ZPLog("测试暂停界面3 == status %d",tempStatus);
     }
     
 }
