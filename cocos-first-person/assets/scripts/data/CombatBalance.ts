@@ -12,4 +12,8 @@ export const CombatBalance = {
   playerMaxHp: 100,
   /** 杀戮尖塔式死亡后加载的场景 */
   runStartScene: 'Game',
+  /** 格挡时受到伤害倍率 */
+  blockDamageRatio: 0.25,
+  /** 闪避持续秒数（吃下一段伤害前有效） */
+  dodgeIFrameSec: 1.2,
 } as const;

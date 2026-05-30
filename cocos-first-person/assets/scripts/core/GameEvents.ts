@@ -20,6 +20,9 @@ export const GameEvents = {
   CAST_INTERRUPTED: 'cast-interrupted',
 
   PLAYER_HP_CHANGED: 'player-hp-changed',
-  /** 杀戮尖塔式整局重来 */
+  /** 玩家开始读条/前摇（可与怪物读条并行） */
+  PLAYER_ACTION_START: 'player-action-start',
+  /** 玩家读条结束、伤害/效果结算 */
+  PLAYER_ACTION_RELEASE: 'player-action-release',
   RUN_RESTART: 'run-restart',
 } as const;

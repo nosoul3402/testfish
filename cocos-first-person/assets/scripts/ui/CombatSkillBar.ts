@@ -41,14 +41,12 @@ export class CombatSkillBar extends Component {
     const bus = this.eventBus ?? this.node;
     bus.on(GameEvents.COMBAT_START, this.show, this);
     bus.on(GameEvents.COMBAT_END, this.hide, this);
-    bus.on('skill-card-click', this.onCardClick, this);
   }
 
   onDestroy(): void {
     const bus = this.eventBus ?? this.node;
     bus.off(GameEvents.COMBAT_START, this.show, this);
     bus.off(GameEvents.COMBAT_END, this.hide, this);
-    bus.off('skill-card-click', this.onCardClick, this);
   }
 
   private buildCards(root: Node): void {
@@ -87,23 +85,32 @@ export class CombatSkillBar extends Component {
     root.active = false;
   }
 
-  private onCardClick(detail?: { action?: SkillAction }): void {
+  private onCardClick(detail?: { skillId?: string; action?: SkillAction }): void {
     const player = this.player;
-    if (!player) return;
-    switch (detail?.action) {
-      case SkillAction.NormalAttack:
-      case SkillAction.WeaponAttack:
-        this.handAttack?.playAttackSwing();
-        player.normalAttack();
-        break;
-      case SkillAction.Block:
-        player.block();
-        break;
-      case SkillAction.Dodge:
-        player.dodge();
-        break;
-      default:
-        break;
+    if (!player || !player.canActNow) return;
+
+    const entry = DefaultSkillBarLayout.find(
+      (e) => e.skillId === detail?.skillId || e.action === detail?.action,
+    );
+    if (!entry) return;
+
+    const cast = entry.castTimeSec ?? 0;
+
+    if (
+      entry.action === SkillAction.NormalAttack ||
+      entry.action === SkillAction.WeaponAttack
+    ) {
+      if (cast <= 0) this.handAttack?.playAttackSwing();
+      else {
+        const bus = this.eventBus ?? this.node;
+        const onRelease = (): void => {
+          bus.off(GameEvents.PLAYER_ACTION_RELEASE, onRelease, this);
+          this.handAttack?.playAttackSwing();
+        };
+        bus.on(GameEvents.PLAYER_ACTION_RELEASE, onRelease, this);
+      }
     }
+
+    player.tryAction(entry);
   }
 }

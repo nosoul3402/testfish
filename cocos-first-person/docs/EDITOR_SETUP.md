@@ -102,6 +102,8 @@ Canvas
 
 调试：勾选 `PlayerCombat.debugInterruptSkill` 后可在代码里调 `debugStunInterrupt()` 测打断。
 
+双手与技能 UI：见 [UI_HANDS_AND_SKILLS.md](./UI_HANDS_AND_SKILLS.md)。
+
 ## 6. 调参建议
 
 - 先 **只开放大、不上移**，调 `zoomDuration` 到手感合适。  
