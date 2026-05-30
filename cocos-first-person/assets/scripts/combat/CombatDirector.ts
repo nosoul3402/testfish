@@ -1,10 +1,11 @@
-import { _decorator, Component, Node, CCBoolean } from 'cc';
+import { _decorator, Component, Node, CCBoolean, SpriteFrame } from 'cc';
 import { GameEvents } from '../core/GameEvents';
 import { CombatBalance } from '../data/CombatBalance';
 import { DefaultSlime } from '../data/DefaultMonsters';
 import { MonsterConfigData } from './CombatTypes';
 import { MonsterController } from './MonsterController';
 import { PlayerCombat } from './PlayerCombat';
+import { MonsterModelRegistry } from './MonsterModelRegistry';
 
 const { ccclass, property } = _decorator;
 
@@ -16,11 +17,17 @@ export class CombatDirector extends Component {
   @property(PlayerCombat)
   player: PlayerCombat | null = null;
 
+  @property(MonsterModelRegistry)
+  modelRegistry: MonsterModelRegistry | null = null;
+
   @property(Node)
   monsterSlot: Node | null = null;
 
   @property(Node)
   eventBus: Node | null = null;
+
+  @property({ type: CCBoolean, tooltip: 'true=从模型表随机；false=仅用 defaultConfig' })
+  useRandomMonsterModel = true;
 
   @property({ type: CCBoolean })
   combatActive = false;
@@ -37,22 +44,33 @@ export class CombatDirector extends Component {
     bus.off(GameEvents.COMBAT_END, this.onCombatEnd, this);
   }
 
-  /** 由 EncounterScheduler 调用 */
-  triggerEncounter(config: MonsterConfigData = DefaultSlime): void {
+  triggerEncounter(fixedConfig?: MonsterConfigData): void {
     if (this.combatActive) return;
     this.combatActive = true;
     this.emit(GameEvents.EXPLORING_DISABLED);
-    this.emit(GameEvents.ENCOUNTER_START, { monsterId: config.id });
+
+    let config = fixedConfig ?? DefaultSlime;
+    let sprite = null as import('cc').SpriteFrame | null;
+    let modelId = config.id;
+
+    if (this.useRandomMonsterModel && this.modelRegistry) {
+      const pick = this.modelRegistry.pickRandom();
+      config = pick.config;
+      sprite = pick.spriteFrame;
+      modelId = pick.modelId;
+    }
+
+    this.emit(GameEvents.ENCOUNTER_START, { monsterId: modelId });
 
     const forceAlert = Math.random() < CombatBalance.earlyAlertChance;
-    this.monster?.spawn(config, forceAlert);
+    this.monster?.spawn(config, forceAlert, sprite);
     if (this.monsterSlot) this.monsterSlot.active = true;
 
-    this.emit(GameEvents.COMBAT_START, { monsterId: config.id, forceAlert });
+    this.emit(GameEvents.COMBAT_START, { monsterId: modelId, forceAlert });
   }
 
   private onEncounterStart(): void {
-    // 遭遇短停顿可在此加 tween
+    // 遭遇短停顿
   }
 
   private onCombatEnd(ev?: { victory?: boolean }): void {

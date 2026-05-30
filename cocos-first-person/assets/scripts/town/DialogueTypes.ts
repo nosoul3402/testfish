@@ -15,6 +15,7 @@ export class DialogueOptionRow {
   actionType = 'chat';
 }
 
+@ccclass('NpcDialogueSet')
 export class NpcDialogueSet {
   @property({ type: CCString })
   npcId = '';

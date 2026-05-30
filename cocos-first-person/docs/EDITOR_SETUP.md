@@ -29,6 +29,7 @@ Canvas
 │   ├── TunnelCombatGate
 │   ├── EncounterScheduler
 │   ├── CombatDirector
+│   ├── MonsterModelRegistry      # 随机怪物 model_01 派对猫等
 │   ├── PlayerCombat
 │   └── RunRestartController
 └── Doors

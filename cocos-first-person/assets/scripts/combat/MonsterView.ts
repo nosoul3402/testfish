@@ -1,4 +1,14 @@
-import { _decorator, Component, Node, Label, tween, Vec3, Sprite, Color } from 'cc';
+import {
+  _decorator,
+  Component,
+  Node,
+  Label,
+  tween,
+  Vec3,
+  Sprite,
+  SpriteFrame,
+  Color,
+} from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -24,6 +34,12 @@ export class MonsterView extends Component {
 
   onLoad(): void {
     this.originPos.set(this.node.position);
+  }
+
+  setBodySprite(frame: SpriteFrame | null): void {
+    if (!frame) return;
+    const spr = this.bodySprite ?? this.getComponent(Sprite);
+    if (spr) spr.spriteFrame = frame;
   }
 
   setRestingVisible(visible: boolean): void {

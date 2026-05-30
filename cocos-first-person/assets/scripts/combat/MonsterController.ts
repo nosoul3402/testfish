@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, CCFloat } from 'cc';
+import { _decorator, Component, Node, CCFloat, SpriteFrame } from 'cc';
 import { AttackKind, MonsterAttackConfig, MonsterConfigData, MonsterState } from './CombatTypes';
 import { MonsterView } from './MonsterView';
 import { CastBarUI } from './CastBarUI';
@@ -42,8 +42,9 @@ export class MonsterController extends Component {
     return this.state === MonsterState.Dead;
   }
 
-  spawn(config: MonsterConfigData, forceAlert: boolean): void {
+  spawn(config: MonsterConfigData, forceAlert: boolean, bodySprite?: SpriteFrame | null): void {
     this.config = config;
+    if (bodySprite) this.view?.setBodySprite(bodySprite);
     this.hp = config.maxHp;
     this.cooldowns.clear();
     this.castAttack = null;
