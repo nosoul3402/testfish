@@ -45,9 +45,13 @@ export class TunnelSceneSequence extends Component {
   @property({ type: CCBoolean })
   loopSequence = true;
 
-  /** 到最后一帧时是否发 SCENE_FRAME_CHANGED（用于接 loadScene） */
+  /** 是否在「刚进入最后一帧」时发事件（用于接 loadScene） */
   @property({ type: CCBoolean })
   emitOnLastFrame = true;
+
+  /** 为 true 时仅在到达最后一帧时换图（不在每步换） */
+  @property({ type: CCBoolean })
+  changeTextureOnlyOnLastFrame = false;
 
   private frameIndex = 0;
   private stepCount = 0;
@@ -68,6 +72,24 @@ export class TunnelSceneSequence extends Component {
     if (this.stepCount < this.stepsPerFrame) return;
     this.stepCount = 0;
 
+    const lastIndex = this.frames.length - 1;
+    if (this.changeTextureOnlyOnLastFrame) {
+      if (this.frameIndex < lastIndex) {
+        const next = this.frameIndex + 1;
+        this.emit(GameEvents.SCENE_FRAME_WILL_CHANGE, { index: next });
+        this.applyFrame(next);
+        this.emit(GameEvents.SCENE_FRAME_CHANGED, {
+          index: next,
+          isLast: next === lastIndex,
+        });
+      } else if (this.loopSequence) {
+        this.applyFrame(0);
+      } else if (this.emitOnLastFrame) {
+        this.emit(GameEvents.SCENE_FRAME_CHANGED, { index: lastIndex, isLast: true });
+      }
+      return;
+    }
+
     const next = this.frameIndex + 1;
     if (next >= this.frames.length) {
       if (this.loopSequence) {
@@ -82,7 +104,7 @@ export class TunnelSceneSequence extends Component {
     this.applyFrame(next);
     this.emit(GameEvents.SCENE_FRAME_CHANGED, {
       index: next,
-      isLast: next === this.frames.length - 1,
+      isLast: next === lastIndex,
     });
   }
 

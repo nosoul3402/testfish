@@ -2,7 +2,9 @@
 
 用 **Cocos Creator 3.8+** 做竖屏第一人称走廊：中心嵌套图放大 = 前进；透明 PNG 左右/上方；多场景帧序列；点击左右门放大 + 黑场切场景。
 
-> 本目录为 **脚本 + 文档 + 微信构建模板**。请用 Creator 打开或新建项目后，将 `assets/scripts` 等拷入工程（见 [docs/EDITOR_SETUP.md](./docs/EDITOR_SETUP.md)）。
+> 用 **Cocos Creator 3.8+** 直接打开本目录（含 `project.json`）。脚本支持 **TypeScript**（`assets/scripts/`）与 **JavaScript**（`assets/scripts-js/`，二选一）。
+
+**快速说明**：[docs/QUICKSTART.md](./docs/QUICKSTART.md) · **搭场景**：[docs/EDITOR_SETUP.md](./docs/EDITOR_SETUP.md)
 
 ## 核心思路（与你描述一致）
 

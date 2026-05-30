@@ -1,42 +1,47 @@
-import { _decorator, Component, Node, Vec3, tween, CCFloat, CCBoolean } from 'cc';
+import {
+  _decorator,
+  Component,
+  Node,
+  Vec3,
+  tween,
+  CCFloat,
+  CCBoolean,
+  Enum,
+} from 'cc';
 import { GameEvents } from '../core/GameEvents';
+import { TunnelForwardMode } from './TunnelForwardMode';
 
 const { ccclass, property } = _decorator;
 
 /**
- * 第一人称“前进”：中心子图仅放大（锚点已在远处洞口中心），可选同时上移。
+ * 小程序第一人称「前进」—— Cocos Creator 3.x（TypeScript）
  *
- * 美术建议：
- * - 父节点 Frame 用 PNG，左右/上方透明，中间方形洞镂空。
- * - 子节点 Inner 使用同一张或下一层图，position 对准洞口中心，anchor (0.5, 0.5)。
- * - 控制 zoomDuration 即前进速度。
+ * 做法：Inner 节点锚点 (0.5,0.5) 放在美术洞口中心，只 tween scale（可选上移）。
+ * 调 zoomDuration 或 forwardSpeed 控制走路快慢。
  */
 @ccclass('TunnelForwardController')
 export class TunnelForwardController extends Component {
-  /** 洞口内的嵌套图（会缩放） */
   @property(Node)
   innerTunnel: Node | null = null;
 
-  /** 内层初始缩放（与洞口占画面比例一致，如 0.36） */
-  @property({ type: CCFloat })
+  @property({ type: Enum(TunnelForwardMode) })
+  forwardMode: TunnelForwardMode = TunnelForwardMode.ScaleOnly;
+
+  @property({ type: CCFloat, tooltip: '内层初始缩放，与洞口占屏比例一致' })
   innerScaleStart = 0.36;
 
-  /** 单次前进动画时长（秒），越小越快 */
-  @property({ type: CCFloat })
+  @property({ type: CCFloat, tooltip: '单次前进时长（秒），越小越快' })
   zoomDuration = 0.52;
 
-  /** 是否在放大时向上移动（模拟向走廊深处走） */
-  @property({ type: CCBoolean })
-  alsoMoveUp = false;
+  @property({ type: CCFloat, tooltip: '1~10，越大越快（会覆盖 zoomDuration）' })
+  forwardSpeed = 0;
 
-  /** 上移像素（本地坐标，正数向上） */
-  @property({ type: CCFloat })
+  @property({ type: CCFloat, tooltip: 'ScaleAndMoveUp 时 Y 方向位移' })
   moveUpDistance = 40;
 
   @property({ type: CCBoolean })
   blockInputWhileStepping = true;
 
-  /** 事件总线节点（与 TunnelSceneSequence 共用同一节点） */
   @property(Node)
   eventBus: Node | null = null;
 
@@ -46,21 +51,37 @@ export class TunnelForwardController extends Component {
   onLoad(): void {
     if (this.innerTunnel) {
       this.innerOrigin.set(this.innerTunnel.position);
-      this.resetInner(false);
+      this.resetInner();
     }
   }
 
-  /** 设置前进速度：传入“走完一层”的秒数 */
-  setZoomDuration(seconds: number): void {
-    this.zoomDuration = Math.max(0.08, seconds);
+  get alsoMoveUp(): boolean {
+    return this.forwardMode === TunnelForwardMode.ScaleAndMoveUp;
   }
 
-  /** 点击主区域 / 按钮时调用 */
+  /** 有效动画时长 */
+  get stepDuration(): number {
+    if (this.forwardSpeed > 0) {
+      return Math.max(0.08, 1.1 / this.forwardSpeed);
+    }
+    return Math.max(0.08, this.zoomDuration);
+  }
+
+  setZoomDuration(seconds: number): void {
+    this.zoomDuration = Math.max(0.08, seconds);
+    this.forwardSpeed = 0;
+  }
+
+  setForwardSpeed(speed1to10: number): void {
+    this.forwardSpeed = Math.min(10, Math.max(1, speed1to10));
+  }
+
   stepForward(): void {
     if (!this.innerTunnel || this.stepping) return;
     if (this.blockInputWhileStepping) this.stepping = true;
 
     const inner = this.innerTunnel;
+    const duration = this.stepDuration;
     const endScale = new Vec3(1, 1, 1);
     const endPos = new Vec3(
       this.innerOrigin.x,
@@ -69,29 +90,19 @@ export class TunnelForwardController extends Component {
     );
 
     tween(inner)
-      .to(
-        this.zoomDuration,
-        {
-          scale: endScale,
-          position: endPos,
-        },
-        { easing: 'cubicInOut' },
-      )
+      .to(duration, { scale: endScale, position: endPos }, { easing: 'cubicInOut' })
       .call(() => {
-        this.resetInner(true);
+        this.resetInner();
         this.stepping = false;
         this.emit(GameEvents.TUNNEL_STEP_DONE);
       })
       .start();
   }
 
-  resetInner(animateEvent: boolean): void {
+  resetInner(): void {
     if (!this.innerTunnel) return;
     this.innerTunnel.setScale(this.innerScaleStart, this.innerScaleStart, 1);
     this.innerTunnel.setPosition(this.innerOrigin);
-    if (animateEvent) {
-      // 留给 TunnelSceneSequence 监听 TUNNEL_STEP_DONE
-    }
   }
 
   private emit(event: string): void {
