@@ -81,6 +81,16 @@ Canvas
 
 ---
 
+## UI：双手与底部技能卡
+
+见 [UI_HANDS_AND_SKILLS.md](./UI_HANDS_AND_SKILLS.md)。
+
+- 前进时 **`HandSwayController`** 左右手摆动  
+- 遇怪底部 **`CombatSkillBar`**：空手（展示）/ 普攻 / 格挡 / 闪避  
+- 初期圆角+文字；`resources/skills/` 或编辑器拖图自动替换  
+
+---
+
 ## 后期扩展（已预留）
 
 - `PlayerCombat.useSkill(SkillTag.Interrupt | Stun, damage)`  

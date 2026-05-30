@@ -26,6 +26,8 @@ export class PlayerCombat extends Component {
   private hp = CombatBalance.playerMaxHp;
   private inCombat = false;
   private firstHitPending = true;
+  private blocking = false;
+  private dodgingUntil = 0;
 
   onLoad(): void {
     const bus = this.eventBus ?? this.node;

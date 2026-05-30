@@ -13,7 +13,8 @@ Canvas
 ├── TunnelRoot                    # 隧道视野区（上 58% 屏高）
 │   ├── Frame (Sprite)            # 外层走廊 PNG，透明左右上
 │   └── Inner (Sprite)            # 内层同图或下一帧；对准洞口中心
-├── Hands                         # 双手（不参与缩放）
+├── LeftHand / RightHand          # 挂 HandSwayController + HandAttackAnimator
+├── CombatSkillBar                # 贴底 Widget；遇怪显示技能卡
 ├── HUD                           # 金币、进度条
 ├── Inventory                     # 底部装备栏
 ├── FadeOverlay (Sprite 纯黑 + UIOpacity + FadeOverlay.ts)
@@ -85,7 +86,23 @@ Canvas
 2. **构建发布** → 微信小游戏 → 竖屏 portrait。  
 3. 微信开发者工具导入构建目录，预览真机。
 
-## 5. 调参建议
+## 5. 战斗组件绑定
+
+详见 [COMBAT_PLAN.md](./COMBAT_PLAN.md)。
+
+| 脚本 | 绑定 |
+|------|------|
+| EncounterScheduler | director → CombatDirector；stepsPerEncounter = 3 |
+| CombatDirector | monster → MonsterController；player → PlayerCombat；monsterSlot |
+| MonsterController | view → MonsterView；castBar → CastBarUI；eventBus → GameLogic |
+| PlayerCombat | monster；eventBus |
+| RunRestartController | startSceneName = 你的主场景名 |
+| TunnelCombatGate | tunnel + tapArea |
+| BtnAttack | CombatAttackButton → PlayerCombat |
+
+调试：勾选 `PlayerCombat.debugInterruptSkill` 后可在代码里调 `debugStunInterrupt()` 测打断。
+
+## 6. 调参建议
 
 - 先 **只开放大、不上移**，调 `zoomDuration` 到手感合适。  
 - 再开 `alsoMoveUp`，避免位移过大导致穿帮。  
