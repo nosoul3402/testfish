@@ -30,4 +30,5 @@ Run `npm install` inside `first-person-2d/` on startup (see SetupVmEnvironment).
 ### Notes
 
 - Portrait layout **390×844**, scaled with `Phaser.Scale.FIT`.
-- Main scene: `src/scenes/GameScene.ts` — corridor, hands, HUD, inventory grid (placeholder graphics).
+- Main scene: `src/scenes/GameScene.ts` — tunnel view, hands, HUD, inventory grid.
+- Tunnel: `src/tunnel/TunnelView.ts` — recursive center portal; click / `W` / Space to step forward.
