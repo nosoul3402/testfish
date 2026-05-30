@@ -1,0 +1,8 @@
+{
+  "engine": "cocos-creator",
+  "packages": "packages",
+  "version": "3.8.0",
+  "id": "first-person-mini-01",
+  "isNew": false,
+  "readonly": false
+}
