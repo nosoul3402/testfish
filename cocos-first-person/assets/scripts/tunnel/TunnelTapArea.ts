@@ -19,10 +19,12 @@ export class TunnelTapArea extends Component {
   }
 
   private onTap(_e: EventTouch): void {
+    if (!this.enabled) return;
     this.tunnel?.stepForward();
   }
 
   private onKey(e: { keyCode: KeyCode }): void {
+    if (!this.enabled) return;
     if (e.keyCode === KeyCode.SPACE || e.keyCode === KeyCode.KEY_W) {
       this.tunnel?.stepForward();
     }

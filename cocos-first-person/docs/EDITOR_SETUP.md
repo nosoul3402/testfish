@@ -17,11 +17,19 @@ Canvas
 ├── HUD                           # 金币、进度条
 ├── Inventory                     # 底部装备栏
 ├── FadeOverlay (Sprite 纯黑 + UIOpacity + FadeOverlay.ts)
-├── GameLogic (空节点 + 脚本)
+├── MonsterSlot                   # 走廊正中；单怪/战士用
+│   ├── Body (Sprite 单图)
+│   ├── ZzzRoot (+ Label "Z z z")
+│   └── CastBar (+ CastBarUI + Fill Sprite)
+├── GameLogic (空节点 = eventBus)
 │   ├── TunnelForwardController
 │   ├── TunnelSceneSequence
-│   ├── TunnelTapArea             # 挂在全屏透明 Button 上
-│   └── SceneFlowController
+│   ├── TunnelTapArea
+│   ├── TunnelCombatGate
+│   ├── EncounterScheduler
+│   ├── CombatDirector
+│   ├── PlayerCombat
+│   └── RunRestartController
 └── Doors
     ├── DoorLeft  (+ DoorPortal, FocusAnchor 子节点)
     └── DoorRight (+ DoorPortal)

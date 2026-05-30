@@ -4,7 +4,7 @@
 
 > 用 **Cocos Creator 3.8+** 直接打开本目录（含 `project.json`）。脚本支持 **TypeScript**（`assets/scripts/`）与 **JavaScript**（`assets/scripts-js/`，二选一）。
 
-**快速说明**：[docs/QUICKSTART.md](./docs/QUICKSTART.md) · **搭场景**：[docs/EDITOR_SETUP.md](./docs/EDITOR_SETUP.md)
+**快速说明**：[docs/QUICKSTART.md](./docs/QUICKSTART.md) · **搭场景**：[docs/EDITOR_SETUP.md](./docs/EDITOR_SETUP.md) · **战斗定稿**：[docs/COMBAT_PLAN.md](./docs/COMBAT_PLAN.md)
 
 ## 核心思路（与你描述一致）
 
