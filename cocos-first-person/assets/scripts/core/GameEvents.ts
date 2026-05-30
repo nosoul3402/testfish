@@ -4,9 +4,8 @@ export const GameEvents = {
   SCENE_FRAME_WILL_CHANGE: 'scene-frame-will-change',
   SCENE_FRAME_CHANGED: 'scene-frame-changed',
   DOOR_ENTER_START: 'door-enter-start',
-  DOOR_ENTER_DONE: 'door-enter-done',
+  DOOR_ENTER_END: 'door-enter-end',
 
-  /** 探索态：可前进 */
   EXPLORING_ENABLED: 'exploring-enabled',
   EXPLORING_DISABLED: 'exploring-disabled',
 
@@ -15,14 +14,18 @@ export const GameEvents = {
   COMBAT_START: 'combat-start',
   COMBAT_END: 'combat-end',
   MONSTER_STATE_CHANGED: 'monster-state-changed',
+  MONSTER_DEFEATED: 'monster-defeated',
   CAST_START: 'cast-start',
   CAST_RELEASE: 'cast-release',
   CAST_INTERRUPTED: 'cast-interrupted',
 
   PLAYER_HP_CHANGED: 'player-hp-changed',
-  /** 玩家开始读条/前摇（可与怪物读条并行） */
   PLAYER_ACTION_START: 'player-action-start',
-  /** 玩家读条结束、伤害/效果结算 */
   PLAYER_ACTION_RELEASE: 'player-action-release',
   RUN_RESTART: 'run-restart',
+
+  /** 隧道尽头城镇大门已显示，可交互 */
+  GATE_REVEALED: 'gate-revealed',
+  GATE_ENTER_REQUEST: 'gate-enter-request',
+  ENTER_TOWN: 'enter-town',
 } as const;

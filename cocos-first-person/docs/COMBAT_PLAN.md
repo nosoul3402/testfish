@@ -81,6 +81,20 @@ Canvas
 
 ---
 
+## 半即时规则（已定稿）
+
+| 情况 | 行为 |
+|------|------|
+| 怪物在读条 / Casting | 玩家**仍可**点普攻、格挡、闪避（若自己不在读条中） |
+| 玩家在读条 | 由 `castTimeSec` 控制；期间 `canActNow = false`，不能再按别的招 |
+| 普攻初期 | `castTimeSec = 0`，按下立刻造成伤害 |
+| 普攻后期 | 把 `normalAttackCastTime` 或技能表改为 `0.35` 等，出现 **PlayerCastBarUI** |
+| 怪物读条被打断 | 仅 `SkillTag.Interrupt` 技能，**普攻不打断** |
+
+实现：`PlayerCombat.tryAction()` + 事件 `PLAYER_ACTION_START` / `PLAYER_ACTION_RELEASE`。
+
+---
+
 ## UI：双手与底部技能卡
 
 见 [UI_HANDS_AND_SKILLS.md](./UI_HANDS_AND_SKILLS.md)。

@@ -1,0 +1,13 @@
+{
+  "chapterId": "forest_01",
+  "tunnel": {
+    "stepsToRevealGate": 12,
+    "killsToRevealGate": 5,
+    "requireBothForGate": false,
+    "stepsAfterGateToEnter": 1,
+    "stepsPerEncounter": 3,
+    "stopEncountersAfterGate": true,
+    "townSceneName": "Town"
+  },
+  "comment": "SpriteFrame 请在编辑器 GameChapterConfig 上拖入；JSON 便于策划表格导出后对照"
+}
