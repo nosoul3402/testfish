@@ -1,0 +1,8 @@
+library/
+local/
+temp/
+build/
+profiles/
+native/
+node_modules/
+*.meta.bak

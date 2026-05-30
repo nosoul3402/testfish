@@ -1,39 +1,28 @@
-# 第一人称 2D 游戏
+# 第一人称 2D 游戏（微信小程序 · Cocos Creator）
 
-仓库已重置为新的 **2D 第一人称视角** 项目（走廊探索 + 手持物品 + 底部装备栏 UI，参考移动端地牢类玩法）。
+## 推荐工程：`cocos-first-person/`
 
-## 项目目录
+面向 **微信小游戏**，使用 **Cocos Creator 3.8+**：
 
-| 路径 | 说明 |
-|------|------|
-| `first-person-2d/` | 游戏工程（Vite + TypeScript + Phaser 3） |
+- 中心子图 **放大**（锚点在远处洞口）= 前进；`zoomDuration` 控制速度  
+- 美术 PNG **左右/上方透明**  
+- **多场景帧** 轮换 / 循环，实现无限前进  
+- **左右门**：向门点放大 → 黑场 → `loadScene`
 
-## 快速开始
-
-```bash
-cd first-person-2d
-npm install
-npm run dev
+```text
+cocos-first-person/
+├── assets/scripts/tunnel/   # TunnelForwardController、DoorPortal 等
+├── assets/textures/README.md
+├── docs/EDITOR_SETUP.md     # 编辑器节点与组件绑定
+└── build-templates/wechatgame/
 ```
 
-浏览器打开终端提示的地址（默认 `http://localhost:5173`）。
+请阅读 [cocos-first-person/README.md](./cocos-first-person/README.md) 与 [docs/EDITOR_SETUP.md](./cocos-first-person/docs/EDITOR_SETUP.md)。
 
-## 技术栈
+## 网页原型（可选）
 
-- **Phaser 3**：2D 渲染与场景
-- **Vite**：开发与打包
-- **TypeScript**
+[first-person-2d/](./first-person-2d/)：Phaser 3 递归隧道 demo，用于快速验证透视感，**非小程序发布目标**。
 
-当前为**占位美术**（几何图形 + 文字），便于后续替换精灵与动画。
-
-## 隧道式第一人称（核心）
-
-- 每一帧画面**中心为正方形洞口**，洞内嵌套**同一套画面**（缩小），多层叠加形成无限隧道。
-- **前进**：点击主画面或按 `W` / `空格`，各层洞口同步放大，视觉上向走廊深处移动。
-- 实现见 `src/tunnel/`（`TunnelView`、`buildCorridorFrame`）。
-
-## 场景结构（`src/scenes/GameScene.ts`）
-
-1. **隧道视野**：递归走廊帧（非 UI 部分）  
-2. **前景层**：双手与左右手持槽  
-3. **UI**：顶部货币/进度、技能条、底部生命与 4×2 装备格  
+```bash
+cd first-person-2d && npm install && npm run dev
+```

@@ -2,33 +2,29 @@
 
 ## Cursor Cloud specific instructions
 
-### Repository layout
+### Primary project
 
-- All game code lives in **`first-person-2d/`** (Vite + TypeScript + Phaser 3).
-- Legacy Cocos2d-x / CatchFish sources were removed.
+**`cocos-first-person/`** — Cocos Creator 3.8+ scripts for WeChat Mini Game (no npm dev server in-repo). Open or copy into a Creator project locally; see `cocos-first-person/docs/EDITOR_SETUP.md`.
 
-### Services
+### Optional web prototype
 
-| Service | Required | Command |
-|---------|----------|---------|
-| Vite dev server | Yes (local playtest) | `npm run dev` in `first-person-2d/` |
-| Backend | No | — |
+**`first-person-2d/`** — Phaser tunnel demo:
 
-### Commands (from `first-person-2d/`)
+```bash
+cd first-person-2d && npm install && npm run dev
+```
 
-| Task | Command |
-|------|---------|
-| Install deps | `npm install` |
-| Dev server | `npm run dev` (port **5173**, `host: true`) |
-| Production build | `npm run build` |
-| Preview build | `npm run preview` |
+Port **5173**.
 
 ### VM update script
 
-Run `npm install` inside `first-person-2d/` on startup (see SetupVmEnvironment).
+```text
+cd first-person-2d
+npm install
+```
 
-### Notes
+(`cocos-first-person` has no Node deps until Creator generates them.)
 
-- Portrait layout **390×844**, scaled with `Phaser.Scale.FIT`.
-- Main scene: `src/scenes/GameScene.ts` — tunnel view, hands, HUD, inventory grid.
-- Tunnel: `src/tunnel/TunnelView.ts` — recursive center portal; click / `W` / Space to step forward.
+### WeChat publish
+
+Done in Creator: Build → WeChat Mini Game. Template under `cocos-first-person/build-templates/wechatgame/`.
